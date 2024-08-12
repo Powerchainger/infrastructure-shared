@@ -15,8 +15,8 @@ on:
         type: boolean
 
 jobs:
-  build:
-
+  build_and_test:
+    name: .NET build&[test]
     runs-on: ubuntu-latest
 
     steps:
