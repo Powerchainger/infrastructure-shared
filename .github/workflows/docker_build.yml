@@ -27,7 +27,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: Push Docker image to Docker Hub
+    name: Docker Build&[Push] 
     runs-on: ubuntu-latest
     permissions:
       packages: write
