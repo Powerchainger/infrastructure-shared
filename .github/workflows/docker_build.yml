@@ -20,7 +20,7 @@ on:
       application:
         required: true
         type: string
-      publish_as_latest:
+      push_as_latest:
         required: false
         default: false
         type: boolean
