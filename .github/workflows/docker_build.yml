@@ -30,7 +30,7 @@ on:
         value: ${{jobs.push_to_registry.outputs.meta_tags}}
       image_version:
         description: "The version of probably published image"
-        value: ${{jobs.push_to_registry.outputs.meta_version"}}
+        value: ${{jobs.push_to_registry.outputs.meta_version}}
 
 jobs:
   push_to_registry:
