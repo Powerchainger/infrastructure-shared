@@ -24,7 +24,16 @@ runs:
     - name: Write YAML to file
       run: echo "${{ inputs.values }}" > custom-values.yaml
       shell: bash
-
+      
+    - name: Debug Helm Chart
+      run: >
+        helm upgrade --install --dry-run --debug
+        ${{ inputs.release }}  
+        ${{ inputs.chart }} 
+        --namespace ${{ inputs.namespace }} 
+        -f custom-values.yaml
+      shell: bash
+      
     - name: Deploy Helm Chart
       run: >
         helm upgrade --install 
