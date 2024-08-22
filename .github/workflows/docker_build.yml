@@ -28,6 +28,9 @@ on:
       image_tags:
         description: "The tags of probably published image"
         value: ${{jobs.push_to_registry.outputs.meta_tags}}
+      image_version:
+        description: "The version of probably published image"
+        value: ${{jobs.push_to_registry.outputs.meta_version"}}
 
 jobs:
   push_to_registry:
@@ -40,6 +43,7 @@ jobs:
       id-token: write
     outputs:
       meta_tags: ${{steps.meta.outputs.tags}}
+      meta_version: ${{steps.meta.outputs.version}}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
