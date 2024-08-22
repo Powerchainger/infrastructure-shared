@@ -1,0 +1,35 @@
+name: 'Helm Deploy'
+description: 'Deploy Helm chart with custom values'
+
+inputs:
+  values:
+    description: 'YAML string of Helm values'
+    required: true
+  release:
+    description: "Helm release name"
+    required: true
+    type: string
+  chart:
+    description: "Helm chart to be used"
+    required: true
+    type: string
+  namespace:
+    description: "K8s namespace to execute against"
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Write YAML to file
+      run: echo "${{ inputs.values }}" > custom-values.yaml
+      shell: bash
+
+    - name: Deploy Helm Chart
+      run: >
+        helm upgrade --install 
+        ${{ inputs.release }}  
+        ${{ inputs.chart }} 
+        --namespace ${{ inputs.namespace }} 
+        -f custom-values.yaml
+      shell: bash
