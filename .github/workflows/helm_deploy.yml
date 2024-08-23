@@ -53,5 +53,5 @@ jobs:
         values: ${{ inputs.values }}
         namespace: ${{ inputs.namespace }} 
         release: ${{ inputs.release }}
-        chart: 4{{ inputs.chart }}
+        chart: ${{ inputs.chart }}
     
