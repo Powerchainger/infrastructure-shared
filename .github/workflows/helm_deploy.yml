@@ -1,0 +1,57 @@
+name: Helm deploy
+
+on:
+  workflow_call:
+     inputs:
+       environments:
+         description: "Array of Github enviroments to run this workflow against"
+         required: true
+         type: string
+       values:
+         description: "Yml formatted sting of actual values for a Helm chart"
+         required: true
+         type: string
+       release:
+         description: "Helm release"
+         required: true
+         type: string
+       namespace:
+         description: "K8s namespace"
+         required: true
+         type: string
+       chart: 
+         description: "Array of Github enviroments to run this workflow against"
+         required: true
+         type: string
+     secrets: 
+       KUBE_CONFIG:
+         required: true
+
+jobs:
+  deploy:
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix: 
+        environment: ${{ fromJson(inputs.environments) || fromJson('[\"default\"]') }}
+    environment: ${{ matrix.environment }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Kubernetes context
+      uses: azure/k8s-set-context@v1
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+    - name: Install Helm
+      uses: azure/setup-helm@v4.2.0
+
+    - name: Deploy with Helm
+      uses:  Powerchainger/infrastructure-shared/.github/actions/helm/local-chart-deploy@main
+      with:
+        values: ${{ inputs.values }}
+        namespace: ${{ inputs.namespace }} 
+        release: ${{ inputs.release }}
+        chart: 4{{ inputs.chart }}
+    
