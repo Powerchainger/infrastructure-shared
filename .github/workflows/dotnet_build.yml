@@ -13,12 +13,18 @@ on:
         required: false
         default: true
         type: boolean
+      path:
+        required: false
+        type: string
+        default: "./"
 
 jobs:
   build_and_test:
     name: .NET build&[test]
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ${{inputs.path}}
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
