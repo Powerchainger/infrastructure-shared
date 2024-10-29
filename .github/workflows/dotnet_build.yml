@@ -6,6 +6,10 @@ name: .NET build&[test]
 on:
   workflow_call:
     inputs:
+      skip:
+        required: false
+        type: boolean
+        default: false
       dotnet_version:
         required: true
         type: string
@@ -20,6 +24,7 @@ on:
 
 jobs:
   build_and_test:
+    if: ${{ !inputs.skip }}
     name: .NET build&[test]
     runs-on: ubuntu-latest
     defaults:
