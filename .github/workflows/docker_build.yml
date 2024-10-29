@@ -3,6 +3,10 @@ name: Docker Build&[Push]
 on:
   workflow_call:
     inputs:
+      skip:
+        required: false
+        type: boolean
+        default: false
       file:
         required: true
         type: string
@@ -34,6 +38,7 @@ on:
 
 jobs:
   push_to_registry:
+    if: ${{ !inputs.skip }}
     name: Docker Build&[Push] 
     runs-on: ubuntu-latest
     permissions:
