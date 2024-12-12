@@ -1,0 +1,57 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET Nuget Publish
+on:
+  workflow_call:
+    secrets: 
+      api_key:
+        required: true
+    inputs:
+      skip:
+        required: false
+        type: boolean
+        default: false
+      dotnet_version:
+        required: true
+        type: string
+      path:
+        required: false
+        type: string
+        default: "./"
+      version_suffix:
+        required: false
+        type: string
+        default: ''
+      nuget_feed:
+        required: false
+        type: string 
+        default: 'https://nuget.pkg.github.com/Powerchainger/index.json'
+
+jobs:
+  build_and_publish:
+    if: ${{ !inputs.skip }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{inputs.path}}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{inputs.dotnet_version}}
+    - name: pack nuget
+      run: dotnet pack -p VersionSuffix=${{inputs.version_suffix}} -o ./artifacts
+    - name: push nuget package
+      run: >
+        dotnet nuget push "./artifacts/*nupkg" 
+        --source ${{inputs.nuget_feed}} 
+        --api-key ${{secrets.api-key}}
+        --skip-duplicate
+    - name: push nuget symbols
+      run: >
+        dotnet nuget push "./artifacts/*snupkg" 
+        --source ${{inputs.nuget_feed}} 
+        --api-key ${{secrets.api-key}}
+        --skip-duplicate
