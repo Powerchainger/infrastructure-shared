@@ -53,5 +53,5 @@ jobs:
       run: >
         dotnet nuget push "./artifacts/*snupkg" 
         --source ${{inputs.nuget_feed}} 
-        --api-key ${{secrets.api-key}}
+        --api-key ${{secrets.api_key}}
         --skip-duplicate
