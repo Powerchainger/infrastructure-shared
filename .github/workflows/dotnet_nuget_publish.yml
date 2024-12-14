@@ -48,13 +48,13 @@ jobs:
       run: ls ./artifacts
     - name: push nuget package
       run: >
-        dotnet nuget push ".\artifacts\*.nupkg" 
+        dotnet nuget push "./artifacts/*.nupkg" 
         --source ${{inputs.nuget_feed}} 
         --api-key ${{secrets.api-key}}
         --skip-duplicate
     - name: push nuget symbols
       run: >
-        dotnet nuget push ".\artifacts\*.snupkg" 
+        dotnet nuget push "./artifacts/*.snupkg" 
         --source ${{inputs.nuget_feed}} 
         --api-key ${{secrets.api_key}}
         --skip-duplicate
