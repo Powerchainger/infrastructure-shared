@@ -43,6 +43,8 @@ jobs:
         dotnet-version: ${{inputs.dotnet_version}}
     - name: pack nuget
       run: dotnet pack -p VersionSuffix=${{inputs.version_suffix}} -o ./artifacts
+    - name: display artifacts
+      run: ls ./artifacts
     - name: push nuget package
       run: >
         dotnet nuget push "./artifacts/*nupkg" 
