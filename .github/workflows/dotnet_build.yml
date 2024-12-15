@@ -43,7 +43,7 @@ jobs:
     - name: Override Nuget
       if: ${{ inputs.nuget_config != '' }}
       run: |
-        echo "${{ inputs.nuget_config }}" > NuGet.Config
+        printf '%s\n' "${{ inputs.nuget_config }}" > NuGet.Config
         cat NuGet.Config
     - name: Restore dependencies
       run: dotnet restore
