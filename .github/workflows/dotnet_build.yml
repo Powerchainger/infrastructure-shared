@@ -21,6 +21,10 @@ on:
         required: false
         type: string
         default: "./"
+      nuget_config:
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build_and_test:
@@ -36,6 +40,11 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{inputs.dotnet_version}}
+    - name: Override Nuget
+      if: ${{ inputs.nuget_config != '' }}
+      run: |
+        echo ${{ inputs.nuget_config }} >> NuGet.Config
+        cat NuGet.Config
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
