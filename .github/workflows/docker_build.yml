@@ -28,6 +28,10 @@ on:
         required: false
         default: false
         type: boolean
+      nuget_config:
+        required: false
+        type: string
+        default: ''
     outputs:
       image_tags:
         description: "The tags of probably published image"
@@ -52,7 +56,11 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-        
+      - name: Override Nuget
+        if: ${{ inputs.nuget_config != '' }}
+        run: |
+          printf '%s\n' "${{ inputs.nuget_config }}" > NuGet.Config
+          cat NuGet.Config
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
