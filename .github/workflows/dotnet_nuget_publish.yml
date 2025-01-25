@@ -50,6 +50,7 @@ jobs:
       working-directory: /
       if: ${{ inputs.nuget_config != '' }}
       run: |
+        ls ./
         printf '%s\n' "${{ inputs.nuget_config }}" > NuGet.Config
         cat NuGet.Config
     - name: pack nuget
