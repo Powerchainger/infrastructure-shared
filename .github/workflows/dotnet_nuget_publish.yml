@@ -47,7 +47,7 @@ jobs:
       with:
         dotnet-version: ${{inputs.dotnet_version}}
     - name: Override Nuget
-      working-directory: /
+      working-directory: ./
       if: ${{ inputs.nuget_config != '' }}
       run: |
         ls ./
