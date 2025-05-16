@@ -24,6 +24,10 @@ runs:
     - name: Write YAML to file
       run: echo "${{ inputs.values }}" > custom-values.yaml
       shell: bash
+
+    - name: build dependencies
+      run: helm dependency up ${{ inputs.chart }} 
+      shell: bash
       
     - name: Debug Helm Chart
       run: >
