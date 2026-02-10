@@ -22,20 +22,30 @@ runs:
   using: 'composite'
   steps:
     - name: Write YAML to file
-      run: echo "${{ inputs.values }}" > custom-values.yaml
+      run: |
+        cat <<'EOF' > custom-values.yaml
+        ${{ inputs.values }}
+        EOF
       shell: bash
-
+      
+    - name: Show custom-values.yaml
+      run: |
+        echo "===== custom-values.yaml ====="
+        cat custom-values.yaml
+      shell: bash
+      
     - name: build dependencies
       run: helm dependency up ${{ inputs.chart }} 
       shell: bash
       
-    - name: Debug Helm Chart
-      run: >
-        helm upgrade --install --dry-run --debug
-        ${{ inputs.release }}  
-        ${{ inputs.chart }} 
-        --namespace ${{ inputs.namespace }} 
-        -f custom-values.yaml
+    - name: Render all Helm templates (debug)
+      run: |
+        echo "===== Rendered Helm templates ====="
+        helm template ${{ inputs.chart }} \
+          -f custom-values.yaml \
+          --debug > rendered-all.yaml || true
+    
+        nl -ba rendered-all.yaml | sed -n '1,300p'
       shell: bash
       
     - name: Deploy Helm Chart
