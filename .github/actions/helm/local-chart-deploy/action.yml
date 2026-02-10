@@ -38,13 +38,25 @@ runs:
       run: helm dependency up ${{ inputs.chart }} 
       shell: bash
       
-    - name: Debug Helm Chart
-      run: >
-        helm upgrade --install --dry-run --debug
-        ${{ inputs.release }}  
-        ${{ inputs.chart }} 
-        --namespace ${{ inputs.namespace }} 
-        -f custom-values.yaml
+    - name: Render CronJob with line numbers
+      run: |
+        helm template ./schedulers/dynamic-extreme-prices-morning-scheduler/devops/helm \
+          -f custom-values.yaml \
+          --show-only templates/cronjob.yaml \
+          --debug > rendered-cronjob.yaml || true
+          
+        echo "====== rendered-cronjob.yaml ======"
+        nl -ba rendered-cronjob.yaml | sed -n '1,200p'
+      shell: bash
+      
+    - name: Render all Helm templates (debug)
+      run: |
+        echo "===== Rendered Helm templates ====="
+        helm template ${{ inputs.chart }} \
+          -f custom-values.yaml \
+          --debug > rendered-all.yaml || true
+    
+        nl -ba rendered-all.yaml | sed -n '1,300p'
       shell: bash
       
     - name: Deploy Helm Chart
