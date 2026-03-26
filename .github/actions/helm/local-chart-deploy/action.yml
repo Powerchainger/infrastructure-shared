@@ -44,8 +44,13 @@ runs:
         helm template ${{ inputs.chart }} \
           -f custom-values.yaml \
           --debug > rendered-all.yaml || true
+        awk '
+        /^# Source: .*grafana.yaml/ {skip=1}
+        /^# Source:/ && !/grafana.yaml/ {skip=0}
+        !skip
+        ' rendered-all.yaml > filtered.yaml  
     
-        nl -ba rendered-all.yaml | sed -n '1,300p'
+        nl -ba filtered.yaml | sed -n '1,500p'
       shell: bash
       
     - name: Deploy Helm Chart
